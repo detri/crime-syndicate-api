@@ -1,0 +1,42 @@
+﻿# for development use only
+
+version: '3'
+
+services:
+  app:
+    build: .
+    depends_on:
+      - redis
+      - db
+    networks:
+      app_to_db:
+      app_to_redis:
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_URLS: "https://+;http://+"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "Test1234"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/aspnetapp.pfx"
+    volumes:
+      - type: "bind"
+        source: "$USERPROFILE/.aspnet/https"
+        target: "/https/"
+    ports:
+      - "5001:443"
+      - "5000:80"
+  redis:
+    image: redis:latest
+    networks:
+      app_to_redis:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: crime_test
+      POSTGRES_DB: crime_test
+      POSTGRES_PASSWORD: Test1234
+    networks:
+      app_to_db:
+
+networks:
+  app_to_db:
+  app_to_redis:
