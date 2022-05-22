@@ -13,12 +13,14 @@ public class User
     }
     
     public Guid Id { get; set; }
+    public Guid? SyndicateId { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
     [ValidateNever] public string PasswordHash { get; set; }
 
     [NotMapped] [ValidateNever] public string PasswordEntry { get; set; }
     [NotMapped] [ValidateNever] public string PasswordValidation { get; set; }
+    [NotMapped] public Syndicate? Syndicate { get; set; }
 
     public async Task GeneratePassword()
     {
